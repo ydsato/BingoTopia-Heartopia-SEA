@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Heartopia SEA BingoTopia</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #fffdf9 0%,
+            #fff8f3 45%,
+            #f8eee8 100%
+        );
+
+    color: #765c4d;
+}
+
+header {
+    text-align: center;
+    padding: 25px 20px 15px;
+}
+
+.small-title {
+    color: #b69782;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+}
+
+h1 {
+    margin: 0;
+
+    color: #b69782;
+
+    font-family: Georgia, serif;
+
+    font-size: clamp(50px, 7vw, 80px);
+
+    letter-spacing: 10px;
+
+    font-weight: 400;
+}
+
+.subtitle {
+    display: inline-block;
+
+    padding: 8px 30px;
+
+    margin-top: 5px;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f9dfe3,
+            #f7e5df,
+            #d8f0f6
+        );
+
+    color: #96715f;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+.container {
+    width: min(1500px, 96%);
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+.main-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(500px, 1fr)
+        minmax(500px, 1fr);
+
+    gap: 22px;
+
+    align-items: stretch;
+}
+
+.panel {
+    background: #fffdf9;
+
+    border: 1px solid #d4b6a2;
+
+    border-radius: 25px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 12px 40px
+        rgba(150, 110, 85, 0.12);
+}
+.wheel-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.panel-title {
+    width: 100%;
+
+    text-align: center;
+
+    color: #967764;
+
+    font-size: 19px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+}
+
+.wheel-wrapper {
+    position: relative;
+
+    width: min(650px, 100%);
+
+    aspect-ratio: 1;
+
+    margin: auto;
+}
+
+.pointer {
+    position: absolute;
+
+    z-index: 20;
+
+    top: -8px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    color: #9e745e;
+
+    font-size: 45px;
+
+    line-height: 1;
+
+    filter:
+        drop-shadow(
+            0 4px 3px
+            rgba(120,80,60,.25)
+        );
+}
+
+.wheel {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    border: 10px solid #b99a86;
+
+    background: #fffdf9;
+
+    box-shadow:
+        0 18px 45px
+        rgba(140,100,75,.20);
+
+    transform: rotate(0deg);
+
+    transition:
+        transform
+        5.5s cubic-bezier(
+            .12,
+            .76,
+            .16,
+            1
+        );
+}
+
+canvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+.wheel-center {
+    position: absolute;
+
+    z-index: 10;
+
+    width: 95px;
+    height: 95px;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: #fffdf9;
+
+    border: 6px solid #b99a86;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #8c6b58;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    box-shadow:
+        0 7px 20px
+        rgba(140,100,75,.22);
+}
+
+.result {
+    width: 90%;
+
+    min-height: 105px;
+
+    margin: 15px auto 0;
+
+    border-radius: 20px;
+
+    background: #fbf5f1;
+
+    border: 1px solid #d8bbaa;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+}
+
+.result-label {
+    color: #a48673;
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+}
+
+.result-name {
+    margin-top: 5px;
+
+    color: #8d6b58;
+
+    font-size:
+        clamp(28px, 4vw, 45px);
+
+    font-weight: 900;
+}
+
+.buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    flex-wrap: wrap;
+}
+
+button {
+    border: none;
+
+    border-radius: 999px;
+
+    padding: 14px 30px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    color: #705546;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f9dfe3,
+            #d8f0f6
+        );
+
+    box-shadow:
+        0 8px 25px
+        rgba(150,110,85,.18);
+
+    transition:
+        transform .2s,
+        opacity .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    opacity: .5;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+.reset-button {
+    background: #fffdf9;
+
+    border: 1px solid #cdb09d;
+
+    box-shadow: none;
+
+    font-size: 13px;
+}
+.board-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.board-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 14px;
+
+    color: #967764;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.counter {
+    background: #d8eff5;
+
+    padding: 7px 14px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+}
+
+.bingo-board {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 5px;
+
+    flex: 1;
+}
+
+.name-cell {
+    position: relative;
+
+    min-height: 65px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 6px;
+
+    border-radius: 9px;
+
+    background: #d8f0f6;
+
+    border: 2px solid white;
+
+    color: #725747;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    transition:
+        background .3s ease,
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.name-cell:nth-child(3n) {
+    background: #f9dfe3;
+}
+
+.name-cell:nth-child(4n) {
+    background: #f5e5df;
+}
+
+.name-cell.selected {
+    background: #b99a86 !important;
+
+    color: white;
+
+    transform: scale(.96);
+
+    box-shadow:
+        inset 0 0 0 3px
+        rgba(255,255,255,.35),
+
+        0 5px 12px
+        rgba(140,100,75,.25);
+}
+
+.name-cell.selected::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 3px;
+
+    right: 5px;
+
+    font-size: 13px;
+
+    color: white;
+}
+
+@media (max-width: 1100px) {
+
+    .main-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .wheel-wrapper {
+        width: min(700px, 90vw);
+    }
+
+    .bingo-board {
+        grid-template-columns:
+            repeat(10, 1fr);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .bingo-board {
+        grid-template-columns:
+            repeat(5, 1fr);
+    }
+
+    .name-cell {
+        min-height: 58px;
+        font-size: 10px;
+    }
+
+    .panel {
+        padding: 12px;
+    }
+
+    .wheel {
+        border-width: 7px;
+    }
+
+    .wheel-center {
+        width: 80px;
+        height: 80px;
+
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .bingo-board {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+    .name-cell {
+        font-size: 9px;
+        min-height: 55px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="small-title">
+        HEARTOPIA SEA
+    </div>
+
+    <h1>BINGOTOPIA</h1>
+
+    <div class="subtitle">
+        ✦ SPIN THE WHEEL ✦
+    </div>
+
+</header>
+
+
+
+<div class="container">
+
+    <div class="main-layout">
+
+        <section class="panel wheel-panel">
+
+            <div class="panel-title">
+                🎡 DRAW A NAME
+            </div>
+
+
+            <div class="wheel-wrapper">
+
+                <div class="pointer">
+                    ▼
+                </div>
+
+
+                <div
+                    class="wheel"
+                    id="wheel">
+
+                    <canvas
+                        id="wheelCanvas"
+                        width="1200"
+                        height="1200">
+                    </canvas>
+
+
+                    <div class="wheel-center">
+                        SPIN
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="result">
+
+                <div>
+
+                    <div class="result-label">
+                        LAST DRAW
+                    </div>
+
+                    <div
+                        class="result-name"
+                        id="result">
+
+                        READY?
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    id="spinButton">
+
+                    🎡 SPIN THE WHEEL
+
+                </button>
+
+
+                <button
+                    class="reset-button"
+                    id="resetButton">
+
+                    ↻ RESET
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="panel board-panel">
+
+            <div class="board-header">
+
+                <div>
+                    NAME BINGO BOARD
+                </div>
+
+                <div
+                    class="counter"
+                    id="boardCounter">
+
+                    0 / 80 DRAWN
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="bingo-board"
+                id="bingoBoard">
+            </div>
+
+        </section>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* Names for Wheel */
+
+const names = [
+
+    "Adre",
+    "Albert Jr.",
+    "Alpaca",
+    "Aneko",
+    "Andrew",
+    "Annie",
+    "Ash",
+    "Artisan",
+    "Astralis",
+    "Atara",
+
+    "Azure",
+    "Bailey J",
+    "Bill",
+    "Blanc",
+    "Bob",
+    "Bunny",
+    "Capybara",
+    "Cassie",
+    "Cathy",
+    "Dolphin",
+
+    "Doris",
+    "Dorothee",
+    "Eli",
+    "Emiko",
+    "Eric",
+    "Explorer",
+    "Ferret",
+    "Flourite",
+    "Fox",
+    "Gazing boy",
+
+    "Guardian",
+    "Haro",
+    "Harry",
+    "Heartkeeper",
+    "Heartopia",
+    "Jiyoon",
+    "Ka Ching",
+    "Kuris",
+    "Leilani",
+    "lemon",
+
+    "Leng",
+    "Leva",
+    "Luminary",
+    "Luxina",
+    "Maestro",
+    "Massimo",
+    "Merchant",
+    "Mika",
+    "Migsushi",
+    "Mrs. Joan",
+
+    "Naga",
+    "Naniwa",
+    "Naughty",
+    "Oak-Oak",
+    "Oliver",
+    "Panda",
+    "Passionate girl",
+    "Pathfinder",
+    "Patti",
+    "Penguin",
+
+    "Rdg",
+    "Root",
+    "Rory",
+    "Rose",
+    "Sally",
+    "Scholar",
+    "Sea otter",
+    "SEA",
+    "Shania",
+    "Sika Deer",
+
+    "Somi",
+    "The Collector",
+    "Vanya",
+    "Vernie",
+    "Wanderer",
+    "Will",
+    "Worcestershire",
+    "Yxa",
+    "Zeiko",
+    "Zel"
+
+];
+
+let remainingNames = [...names];
+
+let drawnNames = [];
+
+let currentRotation = 0;
+
+let spinning = false;
+
+const bingoBoard =
+    document.getElementById(
+        "bingoBoard"
+    );
+
+const boardCounter =
+    document.getElementById(
+        "boardCounter"
+    );
+
+const result =
+    document.getElementById(
+        "result"
+    );
+
+const spinButton =
+    document.getElementById(
+        "spinButton"
+    );
+
+const resetButton =
+    document.getElementById(
+        "resetButton"
+    );
+
+const wheel =
+    document.getElementById(
+        "wheel"
+    );
+
+const canvas =
+    document.getElementById(
+        "wheelCanvas"
+    );
+
+const ctx =
+    canvas.getContext("2d");
+
+const wheelColors = [
+
+    "#F9DFE3",
+    "#D8F0F6",
+    "#F5E5DF",
+    "#D2EDF3",
+    "#F8E4E7",
+    "#E0F3F6",
+    "#F7E2D8",
+    "#D9EFF4"
+
+];
+
+function renderBingoBoard() {
+
+    bingoBoard.innerHTML = "";
+
+
+    names.forEach(name => {
+
+        const cell =
+            document.createElement(
+                "div"
+            );
+
+
+        cell.className =
+            "name-cell";
+
+
+        cell.textContent =
+            name;
+
+
+        if (
+            drawnNames.includes(name)
+        ) {
+
+            cell.classList.add(
+                "selected"
+            );
+
+        }
+
+
+        bingoBoard.appendChild(
+            cell
+        );
+
+    });
+
+
+    boardCounter.textContent =
+        `${drawnNames.length} / ${names.length} DRAWN`;
+}
+
+function drawWheel() {
+
+    const size =
+        canvas.width;
+
+    const center =
+        size / 2;
+
+    const radius =
+        center - 12;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        size,
+        size
+    );
+
+
+    if (
+        remainingNames.length === 0
+    ) {
+
+        ctx.beginPath();
+
+        ctx.arc(
+            center,
+            center,
+            radius,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "#fffdf9";
+
+        ctx.fill();
+
+        ctx.strokeStyle =
+            "#b99a86";
+
+        ctx.lineWidth = 8;
+
+        ctx.stroke();
+
+        return;
+    }
+
+
+    const slice =
+        (
+            Math.PI * 2
+        ) /
+        remainingNames.length;
+
+
+    remainingNames.forEach(
+        (name, index) => {
+
+            const startAngle =
+                -Math.PI / 2 +
+                index * slice;
+
+            const endAngle =
+                startAngle +
+                slice;
+
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                center,
+                center
+            );
+
+            ctx.arc(
+                center,
+                center,
+                radius,
+                startAngle,
+                endAngle
+            );
+
+            ctx.closePath();
+
+
+            ctx.fillStyle =
+                wheelColors[
+                    index %
+                    wheelColors.length
+                ];
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#fffdf9";
+
+            ctx.lineWidth =
+                remainingNames.length > 50
+                    ? 1
+                    : 2;
+
+            ctx.stroke();
+
+
+            ctx.save();
+
+
+            ctx.translate(
+                center,
+                center
+            );
+
+
+            const middleAngle =
+                startAngle +
+                slice / 2;
+
+
+            ctx.rotate(
+                middleAngle
+            );
+
+
+            ctx.textAlign =
+                "right";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillStyle =
+                "#6f5546";
+
+
+            let fontSize;
+
+
+            if (
+                remainingNames.length >= 70
+            ) {
+
+                fontSize = 10;
+
+            }
+            else if (
+                remainingNames.length >= 50
+            ) {
+
+                fontSize = 11;
+
+            }
+            else if (
+                remainingNames.length >= 35
+            ) {
+
+                fontSize = 13;
+
+            }
+            else if (
+                remainingNames.length >= 20
+            ) {
+
+                fontSize = 16;
+
+            }
+            else {
+
+                fontSize = 20;
+
+            }
+
+
+            ctx.font =
+                `bold ${fontSize}px Arial`;
+
+
+            let label =
+                name;
+
+
+            let maxCharacters;
+
+
+            if (
+                remainingNames.length >= 70
+            ) {
+
+                maxCharacters = 10;
+
+            }
+            else if (
+                remainingNames.length >= 50
+            ) {
+
+                maxCharacters = 13;
+
+            }
+            else if (
+                remainingNames.length >= 35
+            ) {
+
+                maxCharacters = 16;
+
+            }
+            else {
+
+                maxCharacters = 22;
+
+            }
+
+
+            if (
+                label.length >
+                maxCharacters
+            ) {
+
+                label =
+                    label.substring(
+                        0,
+                        maxCharacters - 1
+                    ) +
+                    "…";
+
+            }
+
+
+            ctx.fillText(
+                label,
+                radius - 24,
+                0
+            );
+
+
+            ctx.restore();
+
+        }
+    );
+
+    ctx.beginPath();
+
+    ctx.arc(
+        center,
+        center,
+        radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.strokeStyle =
+        "#b99a86";
+
+    ctx.lineWidth = 9;
+
+    ctx.stroke();
+
+}
+
+function spinWheel() {
+
+    if (
+        spinning ||
+        remainingNames.length === 0
+    ) {
+
+        return;
+    }
+
+
+    spinning = true;
+
+    spinButton.disabled = true;
+
+    if (
+        drawnNames.length > 0
+    ) {
+
+        const previousWinner =
+            drawnNames[
+                drawnNames.length - 1
+            ];
+
+
+        const previousIndex =
+            remainingNames.indexOf(
+                previousWinner
+            );
+
+
+        if (
+            previousIndex !== -1
+        ) {
+
+            remainingNames.splice(
+                previousIndex,
+                1
+            );
+
+        }
+
+        drawWheel();
+    }
+
+
+    /*
+        Safety check.
+    */
+
+    if (
+        remainingNames.length === 0
+    ) {
+
+        spinning = false;
+
+        result.textContent =
+            "ALL DRAWN! 🎉";
+
+        spinButton.disabled = true;
+
+        spinButton.textContent =
+            "🎉 ALL NAMES DRAWN";
+
+        return;
+    }
+
+    const winnerIndex =
+        Math.floor(
+            Math.random() *
+            remainingNames.length
+        );
+
+
+    const winner =
+        remainingNames[
+            winnerIndex
+        ];
+
+    const degreesPerSlice =
+        360 /
+        remainingNames.length;
+
+
+    const winnerCenter =
+        (
+            winnerIndex +
+            0.5
+        ) *
+        degreesPerSlice;
+
+
+    const targetRotation =
+        360 -
+        winnerCenter;
+
+
+    const currentNormalized =
+        currentRotation % 360;
+
+
+    let extraRotation =
+        targetRotation -
+        currentNormalized;
+
+
+    if (
+        extraRotation < 0
+    ) {
+
+        extraRotation += 360;
+    }
+
+    extraRotation +=
+        360 * 6;
+
+
+    currentRotation +=
+        extraRotation;
+
+
+    wheel.style.transform =
+        `rotate(${currentRotation}deg)`;
+
+
+    let tickerCount = 0;
+
+
+    const ticker =
+        setInterval(() => {
+
+            if (
+                remainingNames.length === 0
+            ) {
+
+                return;
+            }
+
+
+            const randomIndex =
+                Math.floor(
+                    Math.random() *
+                    remainingNames.length
+                );
+
+
+            result.textContent =
+                remainingNames[
+                    randomIndex
+                ];
+
+
+            tickerCount++;
+
+
+            if (
+                tickerCount >= 25
+            ) {
+
+                clearInterval(
+                    ticker
+                );
+
+            }
+
+        }, 140);
+
+    setTimeout(() => {
+
+        clearInterval(ticker);
+
+
+        /*
+            Show actual winner.
+        */
+
+        result.textContent =
+            winner;
+
+        drawnNames.push(
+            winner
+        );
+
+        renderBingoBoard();
+
+
+        spinning = false;
+
+        spinButton.disabled =
+            false;
+
+
+        if (
+            drawnNames.length >=
+            names.length
+        ) {
+
+            spinButton.disabled =
+                true;
+
+            spinButton.textContent =
+                "🎉 ALL NAMES DRAWN";
+        }
+
+    }, 5800);
+}
+
+function resetGame() {
+
+    if (
+        spinning
+    ) {
+
+        return;
+    }
+
+
+    remainingNames =
+        [...names];
+
+
+    drawnNames =
+        [];
+
+
+    currentRotation =
+        0;
+
+
+    wheel.style.transition =
+        "none";
+
+
+    wheel.style.transform =
+        "rotate(0deg)";
+
+
+    setTimeout(() => {
+
+        wheel.style.transition =
+            "transform 5.5s cubic-bezier(.12,.76,.16,1)";
+
+    }, 50);
+
+
+    result.textContent =
+        "READY?";
+
+
+    spinButton.disabled =
+        false;
+
+
+    spinButton.textContent =
+        "🎡 SPIN THE WHEEL";
+
+
+    renderBingoBoard();
+
+    drawWheel();
+}
+
+spinButton.addEventListener(
+    "click",
+    spinWheel
+);
+
+
+resetButton.addEventListener(
+    "click",
+    resetGame
+);
+
+renderBingoBoard();
+
+drawWheel();
+
+</script>
+
+</body>
+</html>
